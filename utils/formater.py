@@ -19,9 +19,7 @@ angle-axis Nx4
 import math
 import numpy as np
 from  numpy import cos, sin,pi
-from utils.rot_utils import rotmat2eular,eular2rotmat
-from utils.rot_utils import eular2quat
-
+from utils.rotation import rotmat2eular,eular2rotmat
 
 
 def eular2cvec(eular,vmin=-pi,vmax=pi):
@@ -55,128 +53,40 @@ def eular2cvec(eular,vmin=-pi,vmax=pi):
 def mc2pose6dof(poses_mc):
     return poses_mc[:,1:]
 
-def save_as_txt(filename,poses,shape='matrix'):
-    #poses (n,3,4)
-    with open(filename,'w') as f:
-        for pose in poses:
-            if shape=='matrix':
-                #pose = pose.reshape([12])
-                pose = str(pose).replace('\n',' ')
-                f.writelines(pose[1:-1]+'\n')
-            if shape =='6dof':
-                pose = str(pose)
-                f.writelines(pose[1:-1]+'\n')
-def load_poses_from_txt(filename):
-    poses=[]
-    with open(filename,'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            pose = line.split()
-            pose = [float(item) for item in pose]
-            poses.append(pose)
-        print('ok')
 
-    return poses
-def dof2matrix(poses):
+def str2pose_6dof(pose_line,fmt='mc'):
+    pose = np.array([float(item) for item in pose_line.split(' ')])
 
-        '''
-        pitch, yaw, roll, x, y, z --> T11 T12 T13 T14 T21 T22 T23 T24 T31 T32 T33 T34
-        :param poses:
-        :return:
-        '''
+    if fmt=='mc':
+        return pose[1:]
 
-        def deg2raid(x):
-            return x / 360 * math.pi
+def line2np(str):
+    '''
+    :param pose: NxM
+    :return:
+    '''
+    temp = './temp2.txt'
+    ftemp = open(temp,'w')
+    ftemp.write(str)
+    ftemp.close()
+    ret = np.loadtxt(temp)
+    ret = np.expand_dims(ret,axis=0)
+    return  ret
 
-        poses_format =[]
-        for pose in poses:
-            pitch,yaw, roll, x, y, z = pose
+def np2line(pose):
+    '''
+    :param pose: NxM
+    :return:
+    '''
+    temp = './temp.txt'
+    np.savetxt(temp, pose,fmt='%.6e')
+    ftemp = open(temp,'r')
+    line = ftemp.readline()
+    ftemp.close()
+    return line
 
 
-            roll = deg2raid(roll)
-            yaw = deg2raid(yaw)
-            pitch = deg2raid(pitch)
 
-            R_roll = [cos(roll),-sin(roll),0,
-                    sin(roll),cos(roll),0,
-                    0,             0,       1]
-            R_pitch = [1,0,0,
-                       0,cos(pitch),sin(pitch),
-                       0,-sin(pitch),cos(pitch)]
-
-            R_yaw = [cos(yaw),0,-sin(yaw),
-                     0,1,0,
-                     sin(yaw),0,cos(yaw)]
-
-            R_roll = np.array(R_roll).reshape([3,3])
-            R_yaw = np.array(R_yaw).reshape([3,3])
-            R_pitch = np.array(R_pitch).reshape([3,3])
-
-            R= R_roll@R_yaw@R_pitch
-            t = np.array([x,y,z]).reshape([3,1])
-            Rt = np.concatenate([R,t],axis=1)
-            Rt = Rt.reshape(12)
-            poses_format.append(Rt)
-
-        return  poses_format
-def matrix2dof2(pose):
-    T11, T12, T13, T14, T21, T22, T23, T24, T31, T32, T33, T34 = pose
-    yaw = asin(T31)
-    if T32 / (cos(yaw)) > 1:
-        pitch = -asin(1)
-    elif T32 / (cos(yaw)) < -1:
-        pitch = -asin(-1)
-    else:
-        pitch = -asin(T32 / (cos(yaw)))
-
-    if T21 / cos(yaw) < -1:
-        roll = asin(-1.)
-    elif T21 / cos(yaw) > 1:
-        roll = asin(1.)
-    else:
-        roll = asin(T21 / cos(yaw))
-
-    pitch = pitch / pi * 360
-    roll = roll / pi * 360
-    yaw = yaw / pi * 360
-
-    x = T14
-    y = T24
-    z = T34
-    return  [pitch,yaw,roll,x,y,z]
-
-def matrix2dof(poses):
-    poses_6dof =[]
-    for idx,item in enumerate(poses):
-        T11,T12,T13,T14,T21,T22,T23,T24,T31,T32,T33,T34 = item
-
-
-        yaw = asin(T31)
-        if T32/(cos(yaw))>1:
-            pitch = -asin(1)
-        elif T32/(cos(yaw))<-1:
-            pitch = -asin(-1)
-        else:
-            pitch = -asin(T32/(cos(yaw)))
-
-        if T21/cos(yaw)<-1:
-            roll = asin(-1.)
-        elif T21/cos(yaw)>1:
-            roll = asin(1.)
-        else:
-            roll = asin(T21/cos(yaw))
-
-
-        pitch =pitch/pi *360
-        roll =roll/pi *360
-        yaw =yaw/pi *360
-
-        x = T14
-        y=T24
-        z=T34
-        poses_6dof.append([pitch,yaw,roll,x,y,z])
-
-    return poses_6dof
 
 def pose6dof2kitti(pose6dof):
     '''
@@ -192,8 +102,6 @@ def pose6dof2kitti(pose6dof):
     poses_kitti = np.concatenate([rotmat,position],axis=2)#Nx12
     poses_kitti = poses_kitti.reshape([poses_kitti.shape[0],12])
     return poses_kitti
-
-
 def kitti2pose6dof(poses_kitti):
     '''
     mat2eular
@@ -208,3 +116,15 @@ def kitti2pose6dof(poses_kitti):
     np.rad2deg(rotmat)
     position = mat34[:,:, 3]
     return np.concatenate([rots,position],axis=1)
+
+
+if __name__ == '__main__':
+    arr = np.array([1,2,3,4,5,6]).reshape([1,6])
+
+
+    str = np2line(arr)
+    arr_ = line2np(str)
+
+    print(arr_)
+
+
