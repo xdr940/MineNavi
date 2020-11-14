@@ -50,6 +50,21 @@ def eular2cvec(eular,vmin=-pi,vmax=pi):
     return cvec
 
 
+def eular2rotcoord(eular):
+    # eular to coord
+    cvec = eular2rotmat(eular)  # rpy
+    # adjust
+    cvec = cvec @ np.array([1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1]).reshape([3, 3])
+    # due to left times
+    cvec =  np.linalg.inv(cvec)
+
+    return cvec
+
+
+
+
 def mc2pose6dof(poses_mc):
     return poses_mc[:,1:]
 

@@ -16,21 +16,21 @@ from utils.formater import line2np,np2line
 parser = argparse.ArgumentParser(description='KITTI evaluation')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
-                    default="./data_out/circle/sqrt_mc.txt"
+                    default="/home/roit/aws/trajectory/data_out/circle/sqrt_mc.txt"
                     #default = "./datasets/kitti_gt_poses/04.txt"
 
 
 )
 parser.add_argument("--input_fmt",default='mc',choices=['mc','kitti','tum','euroc'])
 parser.add_argument("--output_style",
-                    default='real_time_draw_3dof',
+                    default='draw_6dof',
                     choices=['draw_2dof',
                              'draw_3dof',
                              'draw_6dof',
                              'dynamic_draw_2dof',
                              "dynamic_draw_2dof_outfile",
                              'dynamic_draw_6dof',
-                             "real_time_draw_2dof",
+                             "real_time_draw_6dof",
                              "real_time_draw_3dof"
                              ])
 parser.add_argument("--azim_elev",default=[ -171,40  ],help='观察视角')
@@ -38,14 +38,13 @@ parser.add_argument("--out_dir",default='out_dir')
 parser.add_argument('--interval_6dof',default=1)
 parser.add_argument('--dynamic_outfile',default=False)
 parser.add_argument('--dynamic_time_interval',default=0.1)
-parser.add_argument('--real_time_interval',default=5)
+parser.add_argument('--real_time_interval',default=2)
 
 parser.add_argument('--quiver_lenth',default=10)
 parser.add_argument('--global_scale_factor',default=20.)
 parser.add_argument('--watch_matrix_file',default='./watch_matrix.txt',help='for infer with drawing2d')
-parser.add_argument('--file_pip',default='./pipline.txt')
+parser.add_argument('--file_pip',default='./data_out/eight/_mc.txt')
 args = parser.parse_args()
-
 
 
 
@@ -83,8 +82,8 @@ def draw_6dof(poses_6dof):#poses_6dof
 
 
     # plt limits
-    ax.set_xlim3d([-100, 100])
-    ax.set_ylim3d([-100, 100])
+    #ax.set_xlim3d([-100, 100])
+    #ax.set_ylim3d([-100, 100])
     ax.set_zlim3d([-100, 100])
 
     ceter_x = np.median(poses_6dof[:, 3])
@@ -272,14 +271,16 @@ class RealTimeDraw():
         pose_mc = line2np(pose_6dof_str)
         self.pose6dof = mc2pose6dof(pose_mc)
 
-        self.ax.set_xlim3d([-100, 100])
-        self.ax.set_ylim3d([-100, 100])
+        #self.ax.set_xlim3d([-100, 100])
+        #self.ax.set_ylim3d([-100, 100])
         self.ax.set_zlim3d([-100, 100])
+
+
 
     def _update(self,i):
         self.ax.plot(self.pose6dof[:i,3], self.pose6dof[:i,4], self.pose6dof[:i,5], 'k-.')
 
-        if self.dof=='6dof':
+        if self.dof=='6dof' and i%args.real_time_interval==0:
             eular = np.deg2rad(self.pose6dof[i, :3])
             cvec = eular2cvec(np.expand_dims(eular,axis=0))  # rpy
             self.ax.quiver(
@@ -315,92 +316,6 @@ class RealTimeDraw():
             plt.show()
         pass
 
-def real_time_draw_2dof(fin):
-    """
-      根据文件内容变化绘制点
-      :param fliename:
-      :return:
-      """
-
-    fig = plt.figure(figsize=[8, 5])
-    ax = fig.gca()
-    ax.set_aspect('equal', adjustable='box')
-    ax.set_xlabel('x')  # X不变
-    ax.set_ylabel('z')  # yz交换
-    plt.axis('equal')
-    f = open(fin, 'r')
-
-
-    while True:
-        try:
-            pose_6dof_str = f.__next__()
-            pose_6dof = str2pose_6dof(pose_6dof_str)
-
-            ax.plot(pose_6dof[3], pose_6dof[5],  'k-*')
-
-        except:
-            pass
-        plt.pause(args.dynamic_time_interval)
-def real_time_draw_3dof(fin):
-    """
-      根据文件内容变化绘制点3d
-      :param fliename:
-      :return:
-      """
-    #poses_6dof_ls = np.ones([1,6])
-    poses_6dof_np = np.ones([1, 6])
-
-    def update(i):
-        ax.plot(poses_6dof_np[:i][3], poses_6dof_np[:i][5], poses_6dof_np[:i][4],'k-o')
-        return fig, ax
-
-    def frames_gen():
-        cnt=0
-        global poses_6dof_np
-
-        while True:
-            pose_6dof_str = f.__next__()
-            pose_mc =line2np(pose_6dof_str)
-            pose6dof = mc2pose6dof(pose_mc)
-            poses_6dof_np = np.concatenate([poses_6dof_np,pose6dof])
-
-            cnt += 1
-            yield cnt
-            # f.writelines(str(cnt)+'\n')
-
-    f = open(fin, 'r')
-    a= 10
-
-    #减少点数
-
-    #fig init
-
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    ax.set_aspect('equal', adjustable='box')
-    # ax.yaxis.set_ticks_position('top')
-    ax.invert_xaxis()  # x 反方向
-    ax.set_xlabel('X')  # X不变
-    ax.set_ylabel('z')  # yz交换
-    ax.set_zlabel('y')  #
-
-    plt.axis('equal')
-    #视角改变
-    ax.azim,ax.elev = args.azim_elev
-    plt.title('Aircraft Ego-motion')
-
-
-
-    anim = FuncAnimation(fig=fig, func = update, frames=frames_gen, interval=100)
-
-    #save or show
-    if args.dynamic_outfile==True:
-        same_name = Path(args.input).relpath('./').strip('.txt').replace('/','_')+'.mp4'
-        anim.save(same_name, dpi=80, writer='imagemagick')
-    else:
-        plt.show()
-
-
 
 
 
@@ -433,6 +348,7 @@ if __name__ == '__main__':
     elif args.output_style == 'draw_3dof':
         draw_3dof(poses_6dof)
     elif args.output_style == 'draw_6dof':
+
         draw_6dof(poses_6dof)
 
     #dynamic draw
@@ -442,12 +358,12 @@ if __name__ == '__main__':
         dynamic_draw_6dof(poses_6dof)
 
     #realtime draw
-    elif args.output_style =="real_time_draw_2dof":
-        real_time_draw_2dof(args.file_pip)
+    elif args.output_style =="real_time_draw_6dof":
+        rtd = RealTimeDraw(args.file_pip, dof='6dof')
+        rtd()
     elif args.output_style == "real_time_draw_3dof":
         rtd = RealTimeDraw(args.file_pip,dof='3dof')
         rtd()
-#        real_time_draw_3dof(args.file_pip)
 
 
 

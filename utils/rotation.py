@@ -226,7 +226,7 @@ def eular2quat(eular_rad):
 
 if __name__ == '__main__':
 
-    eulardeg = np.array([45,45,45,
+    eulardeg = np.array([0,270,0,
                          90,90,45]).reshape([2,3])
     eularad = deg2rad(eulardeg)
 
@@ -239,8 +239,7 @@ if __name__ == '__main__':
 
 
     #rotmat axagle
-    expmap = rotmat2expmap(rotmat)
 
 
-    print(expmap)
+    print(rotmat)
 

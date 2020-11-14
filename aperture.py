@@ -10,39 +10,15 @@ from utils.cubic_hermite import CubicHermite as interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="./datasets/jsons/circle.json"# as traj_name
+                    default="./datasets/jsons/random.json"# as traj_name
                     )
 parser.add_argument("--out_dir",default='./data_out')
 parser.add_argument("--traj_curve_out",default=True)
+parser.add_argument("--eularmod",default=False)
+
 parser.add_argument("--out_format",default='mc',choices=['mc','kitti','tum','bag','euroc'])
 args = parser.parse_args()
 
-
-#
-# def load_poses_from_txt(filename):
-#     poses=[]
-#     with open(filename,'r') as f:
-#         lines = f.readlines()
-#         for line in lines:
-#             pose = line.split()
-#             pose = [float(item) for item in pose]
-#             poses.append(pose)
-#         print('ok')
-#
-#     return poses
-#
-# def save_as_txt(filename,poses,shape='matrix'):
-#     #poses (n,3,4)
-#     with open(filename,'w') as f:
-#         for pose in poses:
-#             if shape=='matrix':
-#                 #pose = pose.reshape([12])
-#                 pose = str(pose).replace('\n',' ')
-#                 f.writelines(pose[1:-1]+'\n')
-#             if shape =='6dof':
-#                 pose = str(pose)
-#                 f.writelines(pose[1:-1]+'\n')
-#
 
 
 
@@ -93,23 +69,7 @@ class Aperture():
 
         #curves color
 
-        if args.traj_curve_out:
-            curve_color = ['r', 'g', 'b', 'c', 'k', 'y']
-            names = ['roll', 'pitch', 'yaw', 'x', 'y', 'z']
-            idx=0
-            plt.figure(figsize=[10,5])
-            plt.subplot(1,2,1)
-            for dof in poses[:3]:
-                plt.plot(dof, curve_color[idx])
-                idx += 1
-            plt.legend(names[:3])
 
-            plt.subplot(1,2,2)
-            for dof in poses[3:]:
-                plt.plot(dof, curve_color[idx])
-                idx += 1
-            plt.legend(names[3:])
-            plt.savefig(self.out_dir/'curves.png')
 
 
         poses_6dof_np = np.array(poses).transpose([1,0])
@@ -119,6 +79,30 @@ class Aperture():
 
         return time_full,poses_6dof_np
 
+    def save_curves(self,time_full,poses_6dof):
+        names = ['roll', 'pitch', 'yaw', 'x', 'y', 'z']
+        curve_color = ['r', 'g', 'b', 'c', 'm', 'cyan']
+        idx=0
+        plt.figure(figsize=[10,5])
+        plt.subplot(1,2,1)
+        poses_6dof=poses_6dof.transpose([1,0])
+        for dof in poses_6dof[:3]:
+            plt.plot(time_full,dof, curve_color[idx])
+            idx += 1
+        plt.legend(names[:3])
+        plt.ylabel('rotation(deg)')
+        plt.xlabel('time(ms)')
+
+
+        plt.subplot(1,2,2)
+        for dof in poses_6dof[3:]:
+            plt.plot(time_full,dof, curve_color[idx])
+            idx += 1
+        plt.legend(names[3:])
+        plt.xlabel('time(ms)')
+        plt.ylabel('postion(m)')
+
+        plt.savefig(self.out_dir/'curves.png')
 
 
 
@@ -147,6 +131,9 @@ class Aperture():
         return points_np
 
 
+    def EularMod(self,full_poses6dof):
+        full_poses6dof[:,:3] = np.mod(full_poses6dof[:,:3],360)
+        return full_poses6dof
 
 
     def __call__(self):
@@ -159,8 +146,15 @@ class Aperture():
 
 
         pose6dof_keypoints = self.apature_points_dict_to_numpy(points)
+
+
         timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=100)
 
+
+        if args.eularmod:
+            poses_6dof = self.EularMod(poses_6dof)
+
+        self.save_curves(timestamp,poses_6dof)
 
         if args.out_format =='mc':
             timestamp=np.expand_dims(timestamp,axis=1)

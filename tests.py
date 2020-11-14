@@ -1,8 +1,9 @@
-
 import numpy as np
-rot = -3.5
-
-a = np.mod(rot,2*np.pi)
-print(a)
 
 
+arr = np.linspace(0,100,100).reshape([2,2,25])
+arr_sub = arr[:,1]
+arr[:,1]=0
+
+
+print(arr_sub)
