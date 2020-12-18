@@ -9,15 +9,15 @@ import argparse
 from mpl_toolkits.mplot3d import axes3d
 
 
-from utils.formater import mc2pose6dof,kitti2pose6dof
-from utils.formater import eular2cvec,str2pose_6dof,eular2rotmat,eular2rotcoord
+from utils.formater import mc2pose6dof,kitti2pose6dof,pose6dof2kitti
+from utils.formater import str2pose_6dof,eular2rotmat,eular2rotcoord
 from utils.formater import line2np,np2line
 
 parser = argparse.ArgumentParser(description='KITTI evaluation')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "./datasets/kitti_gt_poses/07.txt"
+                    default = "./data_out/rotcircle/_mc.txt"
 
 
 )
@@ -32,13 +32,13 @@ parser.add_argument('--real_time_interval',default=2)
 
 parser.add_argument('--quiver_lenth',default=10)
 parser.add_argument('--global_scale_factor',default=20.)
-parser.add_argument('--file_pip',default='./data_out/circle/_mc.txt')
+parser.add_argument('--file_pip',default='./data_out/just_fly/_mc.txt')
 args = parser.parse_args()
 
 
 
 class StaticDraw():
-    def __init__(self,poses_6dof):
+    def __init__(self,poses_6dof,flag_coord=True):
         fig = plt.figure(figsize=[10, 10])
         self.ax = fig.gca(projection='3d')
         self.ax.set_aspect('equal', adjustable='box')
@@ -53,7 +53,18 @@ class StaticDraw():
         self.ax.set_zlabel('z')  #
 
         self.position = poses_6dof[:, 3:]  # xyz
-        eular = np.deg2rad(poses_6dof[:, :3])
+        eular = np.deg2rad(poses_6dof[:, :3])#Nx3
+
+        eular_ = np.copy(eular)
+
+
+
+        # MC USING LEFT HAND COORD SYSTEM
+        # eular[:,0] = -eular_[:,1]#roll
+        # eular[:,1] = -eular_[:,0]
+
+        #del eular_
+
 
         #eular to rot coord
         self.rotcoord = eular2rotcoord(eular)  # rpy
@@ -72,22 +83,23 @@ class StaticDraw():
         # plt limits
         # ax.set_xlim3d([-100, 100])
         # ax.set_ylim3d([-100, 100])
-        #self.ax.set_zlim3d([-100, 100])
+        self.ax.set_zlim3d([150, 300])
 
         ceter_x = np.median(poses_6dof[:, 3])
         ceter_y = np.median(poses_6dof[:, 4])
         ceter_z = np.median(poses_6dof[:, 5])
 
         # 坐标系示意
-        self.ax.quiver(ceter_x, ceter_y, ceter_z, 1, 0, 0, length=20, color='r')
-        self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 1, 0, length=20, color='g')
-        self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 0, 1, length=20, color='b')
+        if flag_coord:
+            self.ax.quiver(ceter_x, ceter_y, ceter_z, 1, 0, 0, length=20, color='r')
+            self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 1, 0, length=20, color='g')
+            self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 0, 1, length=20, color='b')
 
     def _point_plt(self,i):
 
         if i%self.interval==0:
 
-            self.ax.plot(self.position[:i, 0], self.position[:i, 1], self.position[:i, 2], 'k-')
+            self.ax.plot(self.position[:i, 0], self.position[:i, 1], self.position[:i, 2], 'k-.')
 
             if self.dof=='6dof':
             #xyz to rgb
@@ -134,18 +146,24 @@ class StaticDraw():
 
 if __name__ == '__main__':
     poses = np.loadtxt(args.input)
+    poses_6dof = mc2pose6dof(poses)
 
+    pose_kitti = pose6dof2kitti(poses_6dof)
+    poses_6dof_ = kitti2pose6dof(pose_kitti)
 
     #change to pose6dof
-    if args.input_fmt=='mc':
-        poses_6dof =mc2pose6dof(poses)
-    elif args.input_fmt=='kitti':
-        poses_6dof = kitti2pose6dof(poses)
+    # if args.input_fmt=='mc':
+    #     poses_6dof =mc2pose6dof(poses)
+    # elif args.input_fmt=='kitti':
+    #     poses_6dof = kitti2pose6dof(poses)
+
+
+
 
     drawer = StaticDraw(poses_6dof)
     drawer(
         dof='6dof',
-        interval=50
+        interval=5
     )
 
 

@@ -10,7 +10,7 @@ from utils.cubic_hermite import CubicHermite as interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="./datasets/jsons/random.json"# as traj_name
+                    default="./datasets/jsons/rotcircle.json"# as traj_name
                     )
 parser.add_argument("--out_dir",default='./data_out')
 parser.add_argument("--traj_curve_out",default=True)
@@ -106,7 +106,7 @@ class Aperture():
 
 
 
-    def apature_points_dict_to_numpy(self,points):
+    def aptPath2pose6dof(self,points):
         '''
         saved as rpy, zyx seq,
         :param points:
@@ -119,8 +119,8 @@ class Aperture():
             point_ls.append(point['angle']['pitch'])#
             point_ls.append(point['angle']['yaw'])#
 
-            point_ls.append(point['point']['z'])#x
-            point_ls.append(point['point']['x'])#y
+            point_ls.append(point['point']['x'])#x
+            point_ls.append(point['point']['z'])#y
             point_ls.append(point['point']['y'])#z
             #z minecraft is using aircraft-coordination sys, change it to ground-coord sys
 
@@ -130,22 +130,31 @@ class Aperture():
         points_np = np.array(points_ls)
         return points_np
 
+    def aptKeyframe2pose(self,main_dict):
+        pass
 
     def EularMod(self,full_poses6dof):
         full_poses6dof[:,:3] = np.mod(full_poses6dof[:,:3],360)
         return full_poses6dof
 
 
-    def __call__(self):
+    def __call__(self,type='apt_path'):
 
-        dict = self.json2dict(self.input_json)#读取原始json文件
-        traj_name = dict['fixtures'][0]['name']
-        points = dict['fixtures'][0]['points']
-        self.duration_ms = int(dict['fixtures'][0]['duration']/20*1000)
-        self.num_frames = len(points)
+        dict = self.json2dict(self.input_json)  # 读取原始json文件
+        main_dict = dict['fixtures'][0]
+        traj_name = main_dict['name']
+        if type=='apt_path':
+            points = main_dict['points']
+            self.duration_ms = int(main_dict['duration']/20*1000)
+            self.num_frames = len(points)
+            pose6dof_keypoints = self.aptPath2pose6dof(points)
+        elif type=='apt_keyframe':
+            self.duration = main_dict['duration']
+            #todo
 
 
-        pose6dof_keypoints = self.apature_points_dict_to_numpy(points)
+
+            pass
 
 
         timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=100)
@@ -159,7 +168,7 @@ class Aperture():
         if args.out_format =='mc':
             timestamp=np.expand_dims(timestamp,axis=1)
             poses_mc = np.concatenate([timestamp,poses_6dof],axis=1)
-            np.savetxt(self.out_dir/'{}_mc.txt'.format(traj_name),poses_mc,delimiter=' ', fmt='%1.8e')
+            np.savetxt(self.out_dir/'_mc.txt',poses_mc,delimiter=' ', fmt='%1.8e')
         elif args.out_format =='kitti':
             poses_kitti = pose6dof2kitti(poses_6dof)#(n,3,4)
             np.savetxt(self.out_dir/'{}_kitti.txt'.format(traj_name),poses_kitti,delimiter=' ', fmt='%1.8e')

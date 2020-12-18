@@ -19,36 +19,35 @@ angle-axis Nx4
 import math
 import numpy as np
 from  numpy import cos, sin,pi
-from utils.rotation import rotmat2eular,eular2rotmat
-
-
-def eular2cvec(eular,vmin=-pi,vmax=pi):
-    '''
-    rpy seq,radin
-    :param rot3:
-    :return:
-    '''
-
-    roll,pitch,yaw = eular[:,0],eular[:,1],eular[:,2]
-    thetaz = -yaw
-    thetay = pitch+np.pi/2
-    x_ = np.sin(thetay)*np.cos(thetaz)
-    y_ = np.sin(thetay)*np.sin(thetaz)
-    z_ = np.cos(thetay)
-
-    bottom = np.sqrt(x_**2+y_**2+z_**2)
-    x_ = np.expand_dims(x_/bottom,axis=1)
-    y_ = np.expand_dims(y_/bottom,axis=1)
-    z_ = np.expand_dims(z_/bottom,axis=1)
-
-    color =roll/(vmax-vmin)+0.5 #[-n*pi, n*pi] -> [-pi,pi]-->[0,1] for colormap 处理
-
-    color = np.expand_dims(color,axis=1)
-    cvec = np.concatenate([x_,y_,z_,color],axis=1)
-
-
-    return cvec
-
+from utils.rotation import rotmat2eular,eular2rotmat,rotmat2eular2
+#
+#
+# def eular2cvec(eular,vmin=-pi,vmax=pi):
+#     '''
+#     rpy seq,radin
+#     :param rot3:
+#     :return:
+#     '''
+#
+#     roll,pitch,yaw = eular[:,0],eular[:,1],eular[:,2]
+#     thetaz = -yaw
+#     thetay = pitch+np.pi/2
+#     x_ = np.sin(thetay)*np.cos(thetaz)
+#     y_ = np.sin(thetay)*np.sin(thetaz)
+#     z_ = np.cos(thetay)
+#
+#     bottom = np.sqrt(x_**2+y_**2+z_**2)
+#     x_ = np.expand_dims(x_/bottom,axis=1)
+#     y_ = np.expand_dims(y_/bottom,axis=1)
+#     z_ = np.expand_dims(z_/bottom,axis=1)
+#
+#     color =roll/(vmax-vmin)+0.5 #[-n*pi, n*pi] -> [-pi,pi]-->[0,1] for colormap 处理
+#
+#     color = np.expand_dims(color,axis=1)
+#     cvec = np.concatenate([x_,y_,z_,color],axis=1)
+#
+#
+#     return cvec
 
 def eular2rotcoord(eular):
     # eular to coord
@@ -109,7 +108,8 @@ def pose6dof2kitti(pose6dof):
     :param poses:
     :return:
     '''
-    eular_rad = pose6dof[:,:3]/360*2*np.pi
+    eular_deg = pose6dof[:,:3]
+    eular_rad = np.deg2rad(eular_deg)
     rotmat =eular2rotmat(eular_rad)#3x3
     rotmat = np.round(rotmat, 8)#设置精度， 以防溢出
     #rot_vec = rotmat2expmap(rot_mat)
@@ -128,17 +128,16 @@ def kitti2pose6dof(poses_kitti):
     rotmat = mat34[:,:,:3]
     rots = rotmat2eular(rotmat)
     rots = np.round(rots, 8)#设置精度， 以防溢出
-    np.rad2deg(rotmat)
+    rots = np.rad2deg(rots)
     position = mat34[:,:, 3]
     return np.concatenate([rots,position],axis=1)
 
 
 if __name__ == '__main__':
-    arr = np.array([1,2,3,4,5,6]).reshape([1,6])
+    arr = np.array([0,90,90,4,5,6]).reshape([1,6])
+    kitti_  = pose6dof2kitti(arr)
+    arr_ = kitti2pose6dof(kitti_)
 
-
-    str = np2line(arr)
-    arr_ = line2np(str)
 
     print(arr_)
 

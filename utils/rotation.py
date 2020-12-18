@@ -125,22 +125,24 @@ def eular2rotmat(eular_rad,mode='xyz'):
                      zeros, cosx, -sinx,
                      zeros, sinx, cosx], axis=1).reshape([B, 3, 3])
 
-    rotMat = zmat@ymat @xmat
+    rotMat = zmat@ymat@xmat
+
     return rotMat
-def rotmat2eular2(rotmat, cy_thresh=None, seq='xyz'):
+def rotmat2eular(rotmat, cy_thresh=None, seq='xyz'):
     #超过90d全部拉跨
 
-        _FLOAT_EPS_4 = np.finfo(float).eps * 4.0
-        M = np.asarray(rotmat)
-        if cy_thresh is None:
-            try:
-                cy_thresh = np.finfo(M.dtype).eps * 4
-            except ValueError:
-                cy_thresh = _FLOAT_EPS_4
+    _FLOAT_EPS_4 = np.finfo(float).eps * 4.0
+    M = np.asarray(rotmat)
+    if cy_thresh is None:
+        try:
+            cy_thresh = np.finfo(M.dtype).eps * 4
+        except ValueError:
+            cy_thresh = _FLOAT_EPS_4
 
-
-
-        r11, r12, r13, r21, r22, r23, r31, r32, r33 = M.flat
+    eulars=[]
+    for item in rotmat:
+        r11, r12, r13, r21, r22, r23, r31, r32, r33 = item.reshape([9])
+        #r11, r12, r13, r21, r22, r23, r31, r32, r33 = M.flat
         # cy: sqrt((cos(y)*cos(z))**2 + (cos(x)*cos(y))**2)
         cy = math.sqrt(r32 * r32 + r33 * r33)
         if seq == 'zyx':
@@ -168,9 +170,10 @@ def rotmat2eular2(rotmat, cy_thresh=None, seq='xyz'):
                     y = -np.pi / 2
                 # x =
             eular = np.array([x,y,z])
-
-        return eular
-def rotmat2eular(rotmat):
+        eulars.append(eular)
+    eulars = np.array(eulars)
+    return eulars
+def rotmat2eular2(rotmat):
     poses_6dof = []
     for idx, item in enumerate(rotmat):
         T11, T12, T13,T21, T22, T23, T31, T32, T33 = item.reshape([9])

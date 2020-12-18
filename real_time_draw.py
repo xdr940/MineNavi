@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import axes3d
 
 
 from utils.formater import mc2pose6dof,kitti2pose6dof
-from utils.formater import eular2cvec,str2pose_6dof,eular2rotmat,eular2rotcoord
+from utils.formater import str2pose_6dof,eular2rotmat,eular2rotcoord
 from utils.formater import line2np,np2line
 
 parser = argparse.ArgumentParser(description='KITTI evaluation')
@@ -21,11 +21,14 @@ parser.add_argument("--input_fmt",default='mc',choices=['mc','kitti','tum','euro
 
 parser.add_argument("--azim_elev",default=[ -171,40  ],help='观察视角')
 
-parser.add_argument('--file_pip',default='./data_out/circle/_mc.txt')
+parser.add_argument('--file_pip',
+                    #default='/home/roit/Desktop/fpose.txt',
+                    default='./data_out/rotcircle/_mc.txt'
+                    )
 
 parser.add_argument('--dof',default='6dof',choices=['6dof','3dof'])
-parser.add_argument('--ms_interval',default=50)
-parser.add_argument('--draw_interval',default=5)
+parser.add_argument('--ms_interval',default=135)
+parser.add_argument('--draw_interval',default=1)
 
 
 
@@ -41,16 +44,16 @@ class RealTimeDraw():
                  ):
         self.file=file
         self.fin = open(file, 'r')
-        self.fig = plt.figure()
+        self.fig = plt.figure(figsize=[10,8])
         self.ax = self.fig.gca(projection='3d')
         self.ax.set_aspect('equal', adjustable='box')
 
 
 
-        self.ax.invert_xaxis()  # x 反方向
+        # self.ax.invert_xaxis()  # x 反方向
         self.ax.set_xlabel('X')  # X不变
-        self.ax.set_ylabel('z')  # yz交换
-        self.ax.set_zlabel('y')  #
+        self.ax.set_ylabel('y')  # yz交换
+        self.ax.set_zlabel('z')  #
 
         plt.axis('equal')
         # 视角改变
@@ -64,11 +67,20 @@ class RealTimeDraw():
 
 
 
+        #
+        #
+        #self.ax.set_xlim3d([-100, 120])
+        #self.ax.set_ylim3d([-10, -200])
+        self.ax.set_zlim3d([0, 200])
+
+        ceter_x=0
+        ceter_y=0
+        ceter_z=0
+        self.ax.quiver(ceter_x, ceter_y, ceter_z, 1, 0, 0, length=20, color='r')
+        self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 1, 0, length=20, color='g')
+        self.ax.quiver(ceter_x, ceter_y, ceter_z, 0, 0, 1, length=20, color='b')
 
 
-        #self.ax.set_xlim3d([-100, 100])
-        #self.ax.set_ylim3d([-100, 100])
-        self.ax.set_zlim3d([-100, 100])
 
         #color vec draw
         # self.mycmap = plt.get_cmap('hsv', 100)
@@ -125,7 +137,7 @@ class RealTimeDraw():
                  ms_interval=50,
                  draw_interval=5,
                  out_file=False,
-                 dof='6dof',
+                 dof='3dof',
                  ):
 
         self.dof=dof
@@ -136,7 +148,7 @@ class RealTimeDraw():
         if out_file == True:
             print('saving...')
             same_name = Path(self.file).relpath('./').strip('.txt').replace('/', '_') + '.gif'
-            anim.save(same_name, dpi=180, writer='imagemagick')
+            anim.save(same_name, dpi=150, writer='imagemagick')
         else:
             plt.show()
         pass
@@ -146,5 +158,6 @@ if __name__ == '__main__':
     drawer=RealTimeDraw(file=args.file_pip)
     drawer(ms_interval=args.ms_interval,
            draw_interval=args.draw_interval,
-           out_file=True
+           dof=args.dof,
+           out_file=False
            )
