@@ -125,7 +125,9 @@ def eular2rotmat(eular_rad,mode='xyz'):
                      zeros, cosx, -sinx,
                      zeros, sinx, cosx], axis=1).reshape([B, 3, 3])
 
-    rotMat = zmat@ymat@xmat
+
+    #times seq very important!
+    rotMat = ymat@xmat@zmat#yaw pitch roll# roll at last
 
     return rotMat
 def rotmat2eular(rotmat, cy_thresh=None, seq='xyz'):

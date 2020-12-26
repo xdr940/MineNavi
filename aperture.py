@@ -10,7 +10,7 @@ from utils.cubic_hermite import CubicHermite as interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="./datasets/jsons/rotcircle.json"# as traj_name
+                    default="/home/roit/datasets/MC2/c2.json"# as traj_name
                     )
 parser.add_argument("--out_dir",default='./data_out')
 parser.add_argument("--traj_curve_out",default=True)
@@ -48,12 +48,12 @@ class Aperture():
         '''
         names = ['roll', 'pitch', 'yaw', 'x', 'y', 'z']
         roll = key_poses_xdof_np[:,0]
-        pitch = key_poses_xdof_np[:,1]
-        yaw = key_poses_xdof_np[:,2]
+        pitch = -key_poses_xdof_np[:,1]
+        yaw =   key_poses_xdof_np[:,2]
 
-        x = key_poses_xdof_np[:,3]
-        y = key_poses_xdof_np[:,4]
-        z = key_poses_xdof_np[:,5]
+        x = key_poses_xdof_np[:,5]#z
+        y = key_poses_xdof_np[:,3]#x
+        z = key_poses_xdof_np[:,4]#y
         #fov = key_poses_7dof_np[:,6]
 
 
@@ -120,8 +120,8 @@ class Aperture():
             point_ls.append(point['angle']['yaw'])#
 
             point_ls.append(point['point']['x'])#x
-            point_ls.append(point['point']['z'])#y
-            point_ls.append(point['point']['y'])#z
+            point_ls.append(point['point']['y'])#y
+            point_ls.append(point['point']['z'])#z
             #z minecraft is using aircraft-coordination sys, change it to ground-coord sys
 
 

@@ -23,7 +23,7 @@ parser.add_argument("--azim_elev",default=[ -171,40  ],help='观察视角')
 
 parser.add_argument('--file_pip',
                     #default='/home/roit/Desktop/fpose.txt',
-                    default='./data_out/rotcircle/_mc.txt'
+                    default='./data_out/c/_mc.txt'
                     )
 
 parser.add_argument('--dof',default='6dof',choices=['6dof','3dof'])

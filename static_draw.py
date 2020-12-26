@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='KITTI evaluation')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "./data_out/rotcircle/_mc.txt"
+                    default = "./data_out/c/_mc.txt"
 
 
 )
@@ -25,12 +25,12 @@ parser.add_argument("--input_fmt",default='kitti',choices=['mc','kitti','tum','e
 
 parser.add_argument("--azim_elev",default=[ -171,40  ],help='观察视角')
 parser.add_argument("--out_dir",default='out_dir')
-parser.add_argument('--interval_6dof',default=2)
+parser.add_argument('--interval_6dof',default=1)
 parser.add_argument('--dynamic_outfile',default=False)
 parser.add_argument('--dynamic_time_interval',default=0.1)
 parser.add_argument('--real_time_interval',default=2)
 
-parser.add_argument('--quiver_lenth',default=10)
+parser.add_argument('--quiver_lenth',default=20)
 parser.add_argument('--global_scale_factor',default=20.)
 parser.add_argument('--file_pip',default='./data_out/just_fly/_mc.txt')
 args = parser.parse_args()
@@ -48,14 +48,13 @@ class StaticDraw():
         # ax.invert_xaxis()  # x 反方向
         # ax.invert_yaxis()  # x 反方向
         # ax.invert_zaxis()
-        self.ax.set_xlabel('X')  # X不变
-        self.ax.set_ylabel('y')  # yz交换
-        self.ax.set_zlabel('z')  #
+        self.ax.set_xlabel('X')
+        self.ax.set_ylabel('y')
+        self.ax.set_zlabel('z')
 
         self.position = poses_6dof[:, 3:]  # xyz
         eular = np.deg2rad(poses_6dof[:, :3])#Nx3
 
-        eular_ = np.copy(eular)
 
 
 
@@ -81,9 +80,9 @@ class StaticDraw():
         self.ax.scatter(self.position[-1, 0], self.position[-1, 1], self.position[-1, 2], c='g')  # 终点黄色
 
         # plt limits
-        # ax.set_xlim3d([-100, 100])
-        # ax.set_ylim3d([-100, 100])
-        self.ax.set_zlim3d([150, 300])
+        self.ax.set_xlim3d([-200, 200])
+        self.ax.set_ylim3d([-200, 200])
+        self.ax.set_zlim3d([-100, 300])
 
         ceter_x = np.median(poses_6dof[:, 3])
         ceter_y = np.median(poses_6dof[:, 4])
