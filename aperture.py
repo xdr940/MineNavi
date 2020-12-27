@@ -10,7 +10,7 @@ from utils.cubic_hermite import CubicHermite as interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="/home/roit/datasets/MC2/c2.json"# as traj_name
+                    default="/home/roit/datasets/MC2/pitch.json"# as traj_name
                     )
 parser.add_argument("--out_dir",default='./data_out')
 parser.add_argument("--traj_curve_out",default=True)

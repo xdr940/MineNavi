@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='KITTI evaluation')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "./data_out/c/_mc.txt"
+                    default = "./data_out/pitch/_mc.txt"
 
 
 )

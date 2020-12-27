@@ -1,0 +1,149 @@
+{
+    "fixtures": [
+        {
+            "points": [
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 0.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 45.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 90.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 45.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 0.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 45.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 90.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 45.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                },
+                {
+                    "point": {
+                        "x": 0.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "angle": {
+                        "yaw": 0.0,
+                        "pitch": 0.0,
+                        "roll": 0.0,
+                        "fov": 70.0
+                    }
+                }
+            ],
+            "useSpeed": false,
+            "speed": {
+                "keyframes": [
+                    {
+                        "tick": 0,
+                        "value": 1.0,
+                        "interp": "LINEAR",
+                        "easing": "IN",
+                        "rx": 5.0,
+                        "ry": 0.0,
+                        "lx": 5.0,
+                        "ly": 0.0
+                    }
+                ]
+            },
+            "duration": 200,
+            "name": "",
+            "color": 0,
+            "modifiers": [],
+            "type": "path",
+            "interpolation": "hermite",
+            "interpolationAngle": "hermite"
+        }
+    ],
+    "modifiers": [],
+    "curves": {}
+}
