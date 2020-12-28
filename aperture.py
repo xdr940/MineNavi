@@ -10,9 +10,9 @@ from utils.cubic_hermite import CubicHermite as interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="/home/roit/datasets/MC2/pitch.json"# as traj_name
+                    default="/home/roit/datasets/MC2/[rz2,x,y][0,45,0][-200,-400,150].json"# as traj_name
                     )
-parser.add_argument("--out_dir",default='./data_out')
+parser.add_argument("--out_dir",default='/home/roit/bluep2/datasets/mc2')
 parser.add_argument("--traj_curve_out",default=True)
 parser.add_argument("--eularmod",default=False)
 
@@ -168,7 +168,7 @@ class Aperture():
         if args.out_format =='mc':
             timestamp=np.expand_dims(timestamp,axis=1)
             poses_mc = np.concatenate([timestamp,poses_6dof],axis=1)
-            np.savetxt(self.out_dir/'_mc.txt',poses_mc,delimiter=' ', fmt='%1.8e')
+            np.savetxt(self.out_dir/'time_poses.txt',poses_mc,delimiter=' ', fmt='%1.8e')
         elif args.out_format =='kitti':
             poses_kitti = pose6dof2kitti(poses_6dof)#(n,3,4)
             np.savetxt(self.out_dir/'{}_kitti.txt'.format(traj_name),poses_kitti,delimiter=' ', fmt='%1.8e')

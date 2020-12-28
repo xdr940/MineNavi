@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='KITTI evaluation')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "./data_out/pitch/_mc.txt"
+                    default = "./data_out/[rz2,x,y][0,45,0][0,600,150]/_mc.txt"
 
 
 )
@@ -80,13 +80,15 @@ class StaticDraw():
         self.ax.scatter(self.position[-1, 0], self.position[-1, 1], self.position[-1, 2], c='g')  # 终点黄色
 
         # plt limits
-        self.ax.set_xlim3d([-200, 200])
-        self.ax.set_ylim3d([-200, 200])
-        self.ax.set_zlim3d([-100, 300])
 
         ceter_x = np.median(poses_6dof[:, 3])
         ceter_y = np.median(poses_6dof[:, 4])
         ceter_z = np.median(poses_6dof[:, 5])
+
+        self.ax.set_xlim3d([ceter_x-100, ceter_x+100])
+        self.ax.set_ylim3d([ceter_y-100, ceter_y+100])
+        self.ax.set_zlim3d([ceter_z-100, ceter_z+100])
+
 
         # 坐标系示意
         if flag_coord:
