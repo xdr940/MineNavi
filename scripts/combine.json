@@ -1,0 +1,655 @@
+{
+  "fixtures": [
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": 0.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": 70.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 200.0,
+            "y": 150.0,
+            "z": 0.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 200.0,
+            "y": 79.28932188134524,
+            "z": 70.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": -100.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": -29.289321881345245
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": 100.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": 170.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": -200.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": -129.28932188134524
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": 200.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": 270.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 200.0,
+            "y": 150.0,
+            "z": 200.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 200.0,
+            "y": 79.28932188134524,
+            "z": 270.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": -300.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": -229.28932188134524
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": 300.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": 370.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": -400.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": -329.28932188134524
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 0.0,
+            "y": 150.0,
+            "z": 400.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 0.0,
+            "y": 79.28932188134524,
+            "z": 470.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [
+        {
+          "point": {
+            "x": 200.0,
+            "y": 150.0,
+            "z": 400.0
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        },
+        {
+          "point": {
+            "x": 200.0,
+            "y": 79.28932188134524,
+            "z": 470.71067811865476
+          },
+          "angle": {
+            "yaw": 0.0,
+            "pitch": 45.0,
+            "roll": 0.0,
+            "fov": 70
+          }
+        }
+      ],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "hermite",
+      "interpolationAngle": "hermite"
+    },
+    {
+      "points": [],
+      "useSpeed": false,
+      "speed": {
+        "keyframes": [
+          {
+            "tick": 0,
+            "value": 1.0,
+            "interp": "LINEAR",
+            "easing": "IN",
+            "rx": 5.0,
+            "ry": 0.0,
+            "lx": 5.0,
+            "ly": 0.0
+          }
+        ]
+      },
+      "duration": 100,
+      "name": "",
+      "color": 0,
+      "modifiers": [],
+      "type": "path",
+      "interpolation": "linear",
+      "interpolationAngle": "linear"
+    }
+  ],
+  "modifiers": [],
+  "curves": []
+}

@@ -1,7 +1,5 @@
-import numpy as np
+a = []
+b=[1,2,3]
+c=[6,5]
 
-
-rand = np.random.random(size=[365,6])
-
-print(rand.shape)
-
+print(a+b+c)

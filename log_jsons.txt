@@ -1,0 +1,13 @@
+[dolly][0 45 0][0 0 150].json
+[dolly][0 45 0][0 200 150].json
+[dolly][0 45 0][-100 0 150].json
+[dolly][0 45 0][100 0 150].json
+[dolly][0 45 0][-200 0 150].json
+[dolly][0 45 0][200 0 150].json
+[dolly][0 45 0][200 200 150].json
+[dolly][0 45 0][-300 0 150].json
+[dolly][0 45 0][300 0 150].json
+[dolly][0 45 0][-400 0 150].json
+[dolly][0 45 0][400 0 150].json
+[dolly][0 45 0][400 200 150].json
+dolly.json
