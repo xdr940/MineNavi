@@ -6,13 +6,18 @@ import numpy as np
 import json
 
 import matplotlib.pyplot as plt
-from utils.cubic_hermite import CubicHermite as interp1d
+from utils.cubic_hermite import CubicHermite
+from scipy.interpolate import interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="/home/roit/datasets/mc_dolly_jsons/[dolly][0 45 0][400 0 150].json"# as traj_name
+                    default="/home/roit/datasets/MineNav/mcv5jsons/base.json"# as traj_name
                     )
-parser.add_argument("--out_dir",default='./data_out')
+parser.add_argument("--out_dir",default='./data_out/mcv5')
+parser.add_argument("--interp_type",
+                    #default='hermite',
+                    default = 'linear')
+
 parser.add_argument("--traj_curve_out",default=True)
 parser.add_argument("--eularmod",default=False)
 
@@ -23,10 +28,14 @@ args = parser.parse_args()
 
 
 class Aperture():
-    def __init__(self,options):
+    def __init__(self,options,interp_type='hermite'):
         self.input_json = Path(options.input_json)
         self.out_dir = Path(args.out_dir)/self.input_json.stem
         self.out_dir.mkdir_p()
+        if interp_type=='hermite':
+            self.interp = CubicHermite
+        elif interp_type =='linear':
+            self.interp = interp1d
 
 
     def json2dict(self,path):
@@ -63,8 +72,8 @@ class Aperture():
 
         poses=[]
         for item in [roll,pitch,yaw,x,y,z]:
-            interp = interp1d(time,item)
-            item_full = interp(time_full)
+            interpf = self.interp(time,item)
+            item_full = interpf(time_full)
             poses.append(item_full)
 
         #curves color

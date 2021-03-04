@@ -15,7 +15,7 @@ from utils.formater import mc2pose6dof,kitti2pose6dof
 from utils.formater import str2pose_6dof,eular2rotmat,eular2rotcoord
 from utils.formater import line2np,np2line
 
-parser = argparse.ArgumentParser(description='KITTI evaluation')
+parser = argparse.ArgumentParser(description='real time draw poses')
 
 parser.add_argument("--input_fmt",default='mc',choices=['mc','kitti','tum','euroc'])
 

@@ -68,9 +68,10 @@ def csv2json(fin,fout):
     js =  json.dumps(dict,indent=2)
     with open(fout,'w') as fp:
         fp.write(js)
-def np2json(poses_6dof,fout):
+def np2json(poses_6dof,
+            fout,
+            default_json='./TMP/path_null.json'):
 
-    default_json = './default.json'
     f = open(default_json, encoding='utf-8')
     content = f.read()
     dict = json.loads(content)
@@ -115,7 +116,7 @@ def log_circle(poses_6dof):
 
     print('offset x:{},y:{}, z:{},r:{}'.format(center_x,center_y,center_z,r))
 
-def circle_change(poses_6dof):
+def circle_change(poses_6dof,offset_x,offset_y):
     '''
     0,1,2,3,4,5
     roll,yaw,pitch,x,y,z
@@ -123,72 +124,62 @@ def circle_change(poses_6dof):
     :return:
     '''
     #r change
-    global x,y,z,offset_x,offset_y
-    iscir=True
-    r = 100
-    if iscir ==True:
-        r_ = r/(2**0.5)
-        poses_6dof[0][x] = -r
-        poses_6dof[0][y] = 0
+    for idx in range(poses_6dof.shape[0]):
+        poses_6dof[idx][x] += offset_x
+        poses_6dof[idx][y] += offset_y
+    # poses_6dof[0][x] = -r
+    # poses_6dof[0][y] = 0
+    #
+    # poses_6dof[1][x] = -r_
+    # poses_6dof[1][y] = r_
+    #
+    # poses_6dof[2][x] = 0
+    # poses_6dof[2][y] = r
+    #
+    # poses_6dof[3][x] = r_
+    # poses_6dof[3][y] = r_
+    #
+    # poses_6dof[4][x] = r
+    # poses_6dof[4][y] = 0
+    #
+    # poses_6dof[5][x] = r_
+    # poses_6dof[5][y] = -r_
+    #
+    # poses_6dof[6][x] = 0
+    # poses_6dof[6][y] = -r
+    #
+    # poses_6dof[7][x] = -r_
+    # poses_6dof[7][y] = -r_
+    #
+    # poses_6dof[8][x] = -r
+    # poses_6dof[8][y] = 0
 
-        poses_6dof[1][x] = -r_
-        poses_6dof[1][y] = r_
-
-        poses_6dof[2][x] = 0
-        poses_6dof[2][y] = r
-
-        poses_6dof[3][x] = r_
-        poses_6dof[3][y] = r_
-
-        poses_6dof[4][x] = r
-        poses_6dof[4][y] = 0
-
-        poses_6dof[5][x] = r_
-        poses_6dof[5][y] = -r_
-
-        poses_6dof[6][x] = 0
-        poses_6dof[6][y] = -r
-
-        poses_6dof[7][x] = -r_
-        poses_6dof[7][y] = -r_
-
-        poses_6dof[8][x] = -r
-        poses_6dof[8][y] = 0
-
-    poses_6dof[:, pitch] = 45
+    #[:, pitch] = 45
 
     # offset
 
 
-    poses_6dof[:, z] = 150
-    poses_6dof[:, x] += offset_x
-    poses_6dof[:, y] += offset_y
+    #poses_6dof[:, x] += offset_x
+    #poses_6dof[:, y] += offset_y
 
 def circle_main():
-    offset_x = -400
-    offset_y = 0
+    offset_x = 400
+    offset_y = 400
     change = circle_change
     log=log_circle
-    MC = Path('/home/roit/datasets/mc_dolly')
-    base_file = Path('/home/roit/datasets/mc_dolly_s/[rz2,x,y][0,0,0][0,0,150].json')
+    MC = Path('/home/roit/datasets/mcv4')
+    base_file = Path('/home/roit/datasets/mcv4/center_circle.json')
     out_dir = Path('./data_out') / base_file.stem
     out_dir.mkdir_p()
 
     poses_6dof = json2np(base_file)
     log(poses_6dof)
-    change(poses_6dof)
+    change(poses_6dof,offset_x,offset_y)
     log(poses_6dof)
 
-    out_file = Path('/home/roit/datasets/MC2/[rz2,x,y][0,{},0][{},{},{}].json'.format(
-        int(45),
-        int(offset_x),
-        int(offset_y),
-        int(150)
-    )
-    )
 
-    # np.savetxt(out_dir/"keypoints.csv",poses_6dof,fmt='%.2f',delimiter=',')
-    np2json(poses_6dof, MC / out_file)
+
+    np2json(poses_6dof,  './TMP/0024.json')
 
 def log_dolly(poses_6dof):
     print(poses_6dof[0])
@@ -227,11 +218,10 @@ def change_dolly(poses_6dof):
 def dolly_main():
 
     offset_rx=0
-    offset_ry=45
+    offset_ry=0
     offset_rz=0
-
-    offset_x = 400
-    offset_y = 200
+    offset_x = 300
+    offset_y = 300
     offset_z = 150
 
     distance=150
@@ -240,8 +230,10 @@ def dolly_main():
     log=log_dolly
 
 
-    MC = Path('/home/roit/datasets/mc_dolly')
-    base_file = Path('/home/roit/datasets/mc_dolly_jsons/dolly.json')
+    base_file = Path('/home/roit/datasets/MineNav/mcv5jsons/base.json')
+    base_np = json2np(base_file)
+
+    out_base = Path('./TMP')
     out_dir = Path('./data_out') / base_file.stem
     out_dir.mkdir_p()
 
@@ -250,7 +242,7 @@ def dolly_main():
     poses_6dof = change(poses_6dof)
     log(poses_6dof)
 
-    out_file = Path('/home/roit/datasets/mc_dolly_jsons/[dolly][{} {} {}][{} {} {}].json'.format(
+    out_file = '[dolly][{} {} {}][{} {} {}].json'.format(
         int(offset_rx),
         int(offset_ry),
         int(offset_rz),
@@ -258,10 +250,9 @@ def dolly_main():
         int(offset_y),
         int(offset_z)
     )
-    )
 
     # np.savetxt(out_dir/"keypoints.csv",poses_6dof,fmt='%.2f',delimiter=',')
-    np2json(poses_6dof, MC / out_file)
+    np2json(poses_6dof, out_base / out_file,default_json=base_file)
 
 
 if __name__ == '__main__':
