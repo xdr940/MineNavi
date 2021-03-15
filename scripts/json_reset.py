@@ -3,13 +3,7 @@ import json
 
 from path import Path
 #仅仅改变jsons文件的xz的位置
-
-
-if __name__ == '__main__':
-    #这里的xy采用论文的而不是Minecraft的
-
-    offset_x = 0
-    offset_y = 100
+def reset(offset_x,offset_y):
 
     if offset_x<0:
         namex = '-{}'.format(-offset_x)
@@ -37,3 +31,15 @@ if __name__ == '__main__':
     print('ok')
 
     pass
+
+if __name__ == '__main__':
+    #这里的xy采用论文的而不是Minecraft的
+
+    pass
+    rng = range(-5,6)
+    offxs = [i*100 for i in rng]
+    offys = [i*100 for i in rng]
+
+    for offx in offxs:
+        for offy in offys:
+            reset(offx,offy)

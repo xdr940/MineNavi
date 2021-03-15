@@ -5,11 +5,11 @@ from path import Path
 import json
 parser = argparse.ArgumentParser(description='combine aperture camera profiles')
 parser.add_argument("--log_jsons",
-                    default="../logs/mcv5_b00.txt"# as traj_name
+                    default="/home/roit/datasets/MineNav/mcv5jsons/logs/block_-300x-300.txt"# as traj_name
                     #default=None
                     )
 parser.add_argument("--base_path",default='/home/roit/datasets/MineNav/mcv5jsons')
-parser.add_argument("--out_json",default='/home/roit/datasets/MineNav/mcv5jsons/combined/mcv5_b00.json')
+parser.add_argument("--out_json",default='/home/roit/datasets/MineNav/mcv5jsons/combined/block_-300x-300.json')
 
 
 def main(args):

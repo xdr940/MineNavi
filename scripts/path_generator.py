@@ -255,7 +255,48 @@ def dolly_main():
     np2json(poses_6dof, out_base / out_file,default_json=base_file)
 
 
+def roter(center):
+    rad = 1
+    points=[]
+    points.append(center.copy())
+
+    center[1]+=1
+    points.append(center.copy())
+
+    center[0]+=1
+    points.append(center.copy())
+
+    center[1]-=1
+    points.append(center.copy())
+
+    center[1] -= 1
+    points.append(center.copy())
+
+    center[0] -= 1
+    points.append(center.copy())
+
+    center[0] -= 1
+    points.append(center.copy())
+
+    center[1] += 1
+    points.append(center.copy())
+
+    center[1] += 1
+    points.append(center.copy())
+
+
+    return points
+
+
+
+def jsons_names():
+    points = roter([-3,3])
+    for item in points:
+        print("{}x{}.json".format(item[0]*100,item[1]*100))
+
+
 if __name__ == '__main__':
-    dolly_main()
+    #dolly_main()
+    jsons_names()
 
 
