@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='static draw')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "./logs/mcv4.txt"
+                    default = "../data_out/0000/time_poses.txt"
 
 
 )
@@ -28,7 +28,7 @@ parser.add_argument("--out_dir",default='out_dir')
 parser.add_argument('--interval_6dof',default=1)
 parser.add_argument('--dynamic_outfile',default=False)
 parser.add_argument('--dynamic_time_interval',default=0.1)
-parser.add_argument('--real_time_interval',default=2)
+parser.add_argument('--real_time_interval',default=10)
 
 parser.add_argument('--quiver_lenth',default=20)
 parser.add_argument('--global_scale_factor',default=20.)
@@ -84,6 +84,9 @@ class StaticDraw():
                                color='b',
                                norm=self.mynorm, normalize=True, length=10)
 
+
+
+
     def add_poses(self,poses_6dof):
 
 
@@ -106,8 +109,8 @@ class StaticDraw():
         self.mynorm = mpl.colors.Normalize(vmin=-180, vmax=180)
 
         # 绘制起点,终点,其他点
-        self.ax.scatter(position[0, 0], position[0, 1], position[0, 2], c='r')  # 起点绿色
-        self.ax.scatter(position[-1, 0], position[-1, 1], position[-1, 2], c='g')  # 终点黄色
+        self.ax.scatter(position[0, 0], position[0, 1], position[0, 2], c='r')  # 起点red
+        self.ax.scatter(position[-1, 0], position[-1, 1], position[-1, 2], c='g')  # 终点green
 
         # plt limits
         if self.firts_add:
@@ -161,14 +164,14 @@ def main():
     just draw one pose line
     :return:
     '''
-    poses = np.loadtxt("../data_out/mcv5/base/time_poses.txt")
+    poses_kitti = np.loadtxt("/home/roit/datasets/kitti_odo_poses/03.txt")
 
-    poses_6dof = mc2pose6dof(poses)
+    # poses_6dof = mc2pose6dof(poses)
     #poses_6dof2 = mc2pose6dof(poses2)
 
     #
     # pose_kitti = pose6dof2kitti(poses_6dof)
-    # poses_6dof_ = kitti2pose6dof(pose_kitti)
+    poses_6dof = kitti2pose6dof(poses_kitti,order='xyz')
 
     # change to pose6dof
     # if args.input_fmt=='mc':
@@ -179,13 +182,13 @@ def main():
     drawer = StaticDraw(
         flag_coord=True,
         dof='6dof',
-        interval=5
+        interval=10
     )
 
     drawer.add_poses(
         poses_6dof
     )
-
+    print(len(poses_6dof))
 
     drawer.show()
 
@@ -196,7 +199,7 @@ def main2():
     '''
     base_path = Path("/home/roit/aws/trajectory/data_out/mcv5")
     lines = readlines('/home/roit/aws/trajectory/logs/static_draw_log.txt')
-    drawer = StaticDraw(flag_coord=True,dof='6dof',interval=5)
+    drawer = StaticDraw(flag_coord=True,dof='6dof',interval=10)
 
     for line in lines:
         if not line:

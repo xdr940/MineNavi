@@ -48,8 +48,17 @@ from utils.rotation import rotmat2eular,eular2rotmat,rotmat2eular2
 #
 #
 #     return cvec
+def vec_length(position):
+    if len(position.shape)==2:
+        return np.sqrt(position[:,0]**2+position[:,1]**2+ position[:,2]**2)
+    else:
+        return np.sqrt(position[0]**2+position[1]**2+ position[2]**2)
 
-def eular2rotcoord(eular):
+
+
+
+
+def eular2rotcoord(eular,dataset='kitti'):
     # eular to coord
     cvec = eular2rotmat(eular)  # rpy
     # adjust
@@ -57,7 +66,8 @@ def eular2rotcoord(eular):
                             0, 1, 0,
                             0, 0, 1]).reshape([3, 3])
     # due to left times
-    cvec =  np.linalg.inv(cvec)
+    if dataset=='mc':
+        cvec =  np.linalg.inv(cvec)
 
     return cvec
 
@@ -117,9 +127,10 @@ def pose6dof2kitti(pose6dof):
     poses_kitti = np.concatenate([rotmat,position],axis=2)#Nx12
     poses_kitti = poses_kitti.reshape([poses_kitti.shape[0],12])
     return poses_kitti
-def kitti2pose6dof(poses_kitti):
+def kitti2pose6dof(poses_kitti,order='zxy'):
     '''
     mat2eular
+
     :param poses_kitti:
     :return:
     '''
@@ -130,6 +141,11 @@ def kitti2pose6dof(poses_kitti):
     rots = np.round(rots, 8)#设置精度， 以防溢出
     rots = np.rad2deg(rots)
     position = mat34[:,:, 3]
+    if order =='xyz':
+        position = np.array([mat34[:,2, 3],mat34[:,0, 3],mat34[:,1, 3]]).transpose([1,0])
+        rots = np.array([rots[:,2],rots[:,0],rots[:,1]]).transpose([1,0])
+
+
     return np.concatenate([rots,position],axis=1)
 
 

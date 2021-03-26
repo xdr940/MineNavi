@@ -11,9 +11,11 @@ from scipy.interpolate import interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    default="/home/roit/datasets/MineNav/mcv5jsons/base.json"# as traj_name
-                    )
-parser.add_argument("--out_dir",default='./data_out/mcv5')
+                    # default="/home/roit/datasets/MineNav/mcv3jsons/0000.json"# as traj_name
+                    default = "/home/roit/bluep2/datasets/mcrandom/0003.json"  # as traj_name
+
+)
+parser.add_argument("--out_dir",default='./data_out/')
 parser.add_argument("--interp_type",
                     #default='hermite',
                     default = 'linear')
@@ -154,7 +156,7 @@ class Aperture():
         traj_name = main_dict['name']
         if type=='apt_path':
             points = main_dict['points']
-            self.duration_ms = int(main_dict['duration']/20*1000)
+            self.duration_ms = int(main_dict['duration'])#duration 400, 默认为400张图,时间就默认为100ms/frame
             self.num_frames = len(points)
             pose6dof_keypoints = self.aptPath2pose6dof(points)
         elif type=='apt_keyframe':
@@ -166,7 +168,7 @@ class Aperture():
             pass
 
 
-        timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=100)
+        timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=1)
 
 
         if args.eularmod:

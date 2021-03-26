@@ -130,7 +130,7 @@ def eular2rotmat(eular_rad,mode='xyz'):
     rotMat = ymat@xmat@zmat#yaw pitch roll# roll at last
 
     return rotMat
-def rotmat2eular(rotmat, cy_thresh=None, seq='xyz'):
+def  rotmat2eular(rotmat, cy_thresh=None, seq='xyz'):
     #超过90d全部拉跨
 
     _FLOAT_EPS_4 = np.finfo(float).eps * 4.0
