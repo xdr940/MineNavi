@@ -13,11 +13,14 @@ def norm(arr):
     return arr
 
 def drawer():
+    PLOT2=True
 
     # poses_kitti = np.loadtxt("/home/roit/datasets/kitti_odo_poses/06.txt")
     # poses_6dof = kitti2pose6dof(poses_kitti,order='xyz')
     # out_str = 'kitti_09'
-    poses = np.loadtxt("/home/roit/datasets/mcrandom/0000/time_poses.txt")
+    # poses = np.loadtxt("/home/roit/datasets/mcv3/0001/time_poses.txt")
+    poses = np.loadtxt("../data_out/mcv2/0000/time_poses.txt")
+
     poses_6dof = mc2pose6dof(poses)
     out_str='mcrandom_01'
 
@@ -30,7 +33,7 @@ def drawer():
 
     ts=[]
     phis=[]
-    step =10
+    step =1
     for i in range(step, len(position)-step):
         delta_t =  position[i+step]-position[i-step]
         if IS_NORM:
@@ -59,15 +62,23 @@ def drawer():
     # Lambda =abs(Lambda)
     #for i in range(len(t)):
     #    Lambda.append(abs(sum(t[i]*phi[i]/vec_length(t[i]*phi[i]))))
-    plt.figure(figsize=[8,4])
-    plt.subplot(1,2,1)
-    plt.plot(Lambda)
-    # plt.ylim([-1.5,1.5])
-    plt.subplot(1,2,2)
-    plt.plot(bins[:-1],hist)
 
+    if PLOT2:
 
-
+        plt.figure(figsize=[8,4])
+        plt.subplot(1,2,1)
+        plt.plot(Lambda)
+        # plt.ylim([-1.5,1.5])
+        plt.subplot(1,2,2)
+        plt.plot(bins[:-1],hist)
+    else:
+        plt.plot(Lambda)
+        plt.title("The $\lambda$ of a random motion sequence")
+        plt.xlabel('Frames(n)')
+        plt.ylabel('$\lambda$')
+        plt.scatter(x = [50,168,250],
+                    y = [Lambda[50],Lambda[168],Lambda[250]],c='r')
+        # plt.grid()
 
     plt.show()
 

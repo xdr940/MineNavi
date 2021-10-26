@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='static draw')
 parser.add_argument("--input",
                     #default="./04001000_poses/p2p.txt"
                     #default="./data_out/rotline/_mc.txt"
-                    default = "../data_out/0000/time_poses.txt"
+                    default = "../data_out/mcrandom/traj_display/time_poses.txt"
 
 
 )
@@ -164,14 +164,16 @@ def main():
     just draw one pose line
     :return:
     '''
-    poses_kitti = np.loadtxt("/home/roit/datasets/kitti_odo_poses/03.txt")
+    poses_mc = np.loadtxt("../data_out/mcrandom/traj_display/time_poses.txt")
 
-    # poses_6dof = mc2pose6dof(poses)
+    # poses_kitti = np.loadtxt("/home/roit/datasets/kitti_odo_poses/03.txt")
+
+    poses_6dof = mc2pose6dof(poses_mc)
     #poses_6dof2 = mc2pose6dof(poses2)
 
     #
     # pose_kitti = pose6dof2kitti(poses_6dof)
-    poses_6dof = kitti2pose6dof(poses_kitti,order='xyz')
+    # poses_6dof = kitti2pose6dof(poses_kitti,order='xyz')
 
     # change to pose6dof
     # if args.input_fmt=='mc':

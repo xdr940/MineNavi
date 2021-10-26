@@ -4,9 +4,8 @@ import numpy as np
 from path import Path
 import matplotlib as mpl
 from matplotlib.animation import FuncAnimation  # 动图的核心函数
-from  matplotlib.colors import  BoundaryNorm
+# from  matplotlib.colors import  BoundaryNorm
 import matplotlib.pyplot as plt
-import time
 import argparse
 from mpl_toolkits.mplot3d import axes3d
 
@@ -23,12 +22,12 @@ parser.add_argument("--azim_elev",default=[ -171,40  ],help='观察视角')
 
 parser.add_argument('--file_pip',
                     #default='/home/roit/Desktop/fpose.txt',
-                    default='./data_out/c/_mc.txt'
+                    default='./data_out/0003/time_poses.txt'
                     )
 
 parser.add_argument('--dof',default='6dof',choices=['6dof','3dof'])
-parser.add_argument('--ms_interval',default=135)
-parser.add_argument('--draw_interval',default=1)
+parser.add_argument('--ms_interval',default=13)
+parser.add_argument('--draw_interval',default=50)
 
 
 

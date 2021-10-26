@@ -11,11 +11,11 @@ from scipy.interpolate import interp1d
 
 parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
 parser.add_argument("--input_json",
-                    # default="/home/roit/datasets/MineNav/mcv3jsons/0000.json"# as traj_name
-                    default = "/home/roit/bluep2/datasets/mcrandom/0003.json"  # as traj_name
+                    # default="/home/roit/datasets/MineNav/mcv2jsons/0000.json"# as traj_name
+                    default = "/home/roit/datasets/MineNav/mcrandom/traj_display.json"  # as traj_name
 
 )
-parser.add_argument("--out_dir",default='./data_out/')
+parser.add_argument("--out_dir",default='./data_out/mcrandom')
 parser.add_argument("--interp_type",
                     #default='hermite',
                     default = 'linear')
@@ -154,6 +154,8 @@ class Aperture():
         dict = self.json2dict(self.input_json)  # 读取原始json文件
         main_dict = dict['fixtures'][0]
         traj_name = main_dict['name']
+
+        # json ==> pose6dof_keypoints
         if type=='apt_path':
             points = main_dict['points']
             self.duration_ms = int(main_dict['duration'])#duration 400, 默认为400张图,时间就默认为100ms/frame
@@ -162,12 +164,9 @@ class Aperture():
         elif type=='apt_keyframe':
             self.duration = main_dict['duration']
             #todo
-
-
-
             pass
 
-
+        # interpolation
         timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=1)
 
 
@@ -176,6 +175,8 @@ class Aperture():
 
         self.save_curves(timestamp,poses_6dof)
 
+
+        #save the path to txt-file with mc-format or kitti-format
         if args.out_format =='mc':
             timestamp=np.expand_dims(timestamp,axis=1)
             poses_mc = np.concatenate([timestamp,poses_6dof],axis=1)
