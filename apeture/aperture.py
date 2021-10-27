@@ -1,39 +1,25 @@
 
 from path import Path
-import argparse
-from utils.formater import pose6dof2kitti
 import numpy as np
 import json
-
 import matplotlib.pyplot as plt
-from utils.cubic_hermite import CubicHermite
+
 from scipy.interpolate import interp1d
 
-parser = argparse.ArgumentParser(description='MineCraft Aperture Tools')
-parser.add_argument("--input_json",
-                    # default="/home/roit/datasets/MineNav/mcv2jsons/0000.json"# as traj_name
-                    default = "/home/roit/datasets/MineNav/mcrandom/traj_display.json"  # as traj_name
+from utils.cubic_hermite import CubicHermite
+from utils.formater import pose6dof2kitti
 
-)
-parser.add_argument("--out_dir",default='./data_out/mcrandom')
-parser.add_argument("--interp_type",
-                    #default='hermite',
-                    default = 'linear')
 
-parser.add_argument("--traj_curve_out",default=True)
-parser.add_argument("--eularmod",default=False)
-
-parser.add_argument("--out_format",default='mc',choices=['mc','kitti','tum','bag','euroc'])
-args = parser.parse_args()
 
 
 
 
 class Aperture():
-    def __init__(self,options,interp_type='hermite'):
-        self.input_json = Path(options.input_json)
-        self.out_dir = Path(args.out_dir)/self.input_json.stem
+    def __init__(self,input_json,out_dir,interp_type='hermite'):
+        self.input_json = Path(input_json)
+        self.out_dir = Path(out_dir)/self.input_json.stem
         self.out_dir.mkdir_p()
+        self.eularmod = True
         if interp_type=='hermite':
             self.interp = CubicHermite
         elif interp_type =='linear':
@@ -116,6 +102,11 @@ class Aperture():
         plt.savefig(self.out_dir/'curves.png')
 
 
+    def EularMod(self,full_poses6dof):
+        full_poses6dof[:,:3] = np.mod(full_poses6dof[:,:3],360)
+        return full_poses6dof
+
+
 
     def aptPath2pose6dof(self,points):
         '''
@@ -141,15 +132,10 @@ class Aperture():
         points_np = np.array(points_ls)
         return points_np
 
-    def aptKeyframe2pose(self,main_dict):
+    def aptKeyframe2pose6dof(self,points):
         pass
 
-    def EularMod(self,full_poses6dof):
-        full_poses6dof[:,:3] = np.mod(full_poses6dof[:,:3],360)
-        return full_poses6dof
-
-
-    def __call__(self,type='apt_path'):
+    def __call__(self,type='apt_path',out_format='mc'):
 
         dict = self.json2dict(self.input_json)  # 读取原始json文件
         main_dict = dict['fixtures'][0]
@@ -170,18 +156,18 @@ class Aperture():
         timestamp,poses_6dof = self.interpolaration_xdof(pose6dof_keypoints,ms_per_frame=1)
 
 
-        if args.eularmod:
+        if self.eularmod:
             poses_6dof = self.EularMod(poses_6dof)
 
         self.save_curves(timestamp,poses_6dof)
 
 
         #save the path to txt-file with mc-format or kitti-format
-        if args.out_format =='mc':
+        if out_format =='mc':
             timestamp=np.expand_dims(timestamp,axis=1)
             poses_mc = np.concatenate([timestamp,poses_6dof],axis=1)
             np.savetxt(self.out_dir/'time_poses.txt',poses_mc,delimiter=' ', fmt='%1.8e')
-        elif args.out_format =='kitti':
+        elif out_format =='kitti':
             poses_kitti = pose6dof2kitti(poses_6dof)#(n,3,4)
             np.savetxt(self.out_dir/'{}_kitti.txt'.format(traj_name),poses_kitti,delimiter=' ', fmt='%1.8e')
 
@@ -191,10 +177,3 @@ class Aperture():
 
 
 
-
-
-
-
-if __name__ == '__main__':
-    aperture = Aperture(args)
-    aperture()
